@@ -47,6 +47,15 @@ async def setup_hook():
     helpers.setup_logger().info("✅ Comandos sincronizados")
 
 if __name__ == "__main__":
-    helpers.setup_logger()
+    logger = helpers.setup_logger()
     keep_alive()
-    bot.run(TOKEN)
+    logger.info("🌐 Servidor web iniciado")
+    
+    try:
+        bot.run(TOKEN)
+    except discord.LoginFailure as e:
+        logger.error(f"❌ Falha no login: Token inválido? {e}")
+        raise
+    except Exception as e:
+        logger.error(f"❌ Erro crítico na inicialização: {e}", exc_info=True)
+        raise

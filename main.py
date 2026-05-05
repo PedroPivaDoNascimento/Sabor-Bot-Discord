@@ -1,9 +1,30 @@
 import discord
 from discord.ext import commands
 import asyncio
+import os
+from flask import Flask
+from threading import Thread
 from config import TOKEN, GC_INTERVAL
 from utils import helpers
 from controllers import commands as cmd_ctrl, events as evt_ctrl
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return '🤖 Bot está online!'
+
+@app.route('/health')
+def health():
+    return 'OK', 200
+
+def run_flask():
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
+
+def keep_alive():
+    t = Thread(target=run_flask)
+    t.daemon = True
+    t.start()
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -23,8 +44,9 @@ async def setup_hook():
     evt_ctrl.EventController(bot).setup()
     asyncio.create_task(gc_task())
     await bot.tree.sync()
-    helpers.setup_logger().info("✅ Comandos sincronizados e bot inicializado.")
+    helpers.setup_logger().info("✅ Comandos sincronizados")
 
 if __name__ == "__main__":
     helpers.setup_logger()
+    keep_alive()
     bot.run(TOKEN)

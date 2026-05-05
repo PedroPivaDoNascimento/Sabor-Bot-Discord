@@ -1,0 +1,29 @@
+# Variáveis de ambiente (NUNCA suba seu token!)
+.env
+.env.local
+
+# Banco de dados e arquivos gerados
+data/
+*.db
+*.sqlite
+
+# Cache e temporários
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# IDE e editores
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
